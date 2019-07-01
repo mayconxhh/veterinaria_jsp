@@ -1,0 +1,87 @@
+create database VETERINARIA;
+
+use VETERINARIA;
+
+create table USUARIO(
+	idUsuario int not null auto_increment,
+	username varchar(15) not null,
+	password varchar(15) not null,
+	nombres varchar(20),
+	apellidos varchar(20),
+	rol varchar(20),
+	telefono varchar(13),
+	unique (username),
+	primary key (idUsuario)
+);
+
+create table CLIENTE(
+	idCliente int not null auto_increment,
+	idUsuario int not null,
+	primerApellido varchar(30),
+	cuentaBanco varchar(25),
+	telefono varchar(13),
+	direccion varchar(50),
+	primary key (idCliente),
+	foreign key (idUsuario) references USUARIO(idUsuario)
+);
+
+create table PACIENTE(
+	idMascota int not null auto_increment,
+	idUsuario int not null,
+	idCliente int not null,
+	aliasMascota varchar(15),
+	especie varchar(15),
+	raza varchar(15),
+	colorPelo varchar(15),
+	fechaNacimiento date,
+	primary key (idMascota),
+	foreign key (idCliente) references CLIENTE(idCliente),
+	foreign key (idUsuario) references USUARIO(idUsuario)
+);
+
+create table PESO(
+	idPeso int not null auto_increment,
+	idUsuario int not null,
+	idMascota int not null,
+	fecha date,
+	peso float,
+	primary key (idPeso),
+	foreign key (idMascota) references PACIENTE(idMascota),
+	foreign key (idUsuario) references USUARIO(idUsuario)
+);
+
+create table VACUNA(
+	idVacuna int not null auto_increment,
+	idUsuario int not null,
+	idMascota int not null,
+	fecha date,
+	enfermedad varchar(50),
+	fechaProxima date,
+	primary key(idVacuna),
+	foreign key (idMascota) references PACIENTE(idMascota),
+	foreign key (idUsuario) references USUARIO(idUsuario)
+);
+
+create table PERSONA(
+	idPersona int not null auto_increment,
+	idUsuario int not null,
+	nombrePersona varchar(20),
+	apellidoPersona varchar(20),
+	telefono varchar(13),
+	primary key (idPersona),
+	foreign key (idUsuario) references USUARIO(idUsuario)
+);
+
+create table PERSONACLIENTE(
+	idPersonaCliente int not null auto_increment,
+	idCliente int not null,
+	idPersona int not null,
+	idUsuario int not null,
+	primary key (idPersonaCliente),
+	foreign key (idCliente) references CLIENTE(idCliente),
+	foreign key (idPersona) references PERSONA(idPersona),
+	foreign key (idUsuario) references USUARIO(idUsuario)
+);
+
+ALTER TABLE USUARIO
+ADD UNIQUE (username);
